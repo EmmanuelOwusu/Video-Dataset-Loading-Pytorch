@@ -55,7 +55,14 @@ if __name__ == '__main__':
     frames = sample[0]  # list of PIL images
     label = sample[1]   # integer label
 
-    plot_video(rows=1, cols=5, frame_list=frames, plot_width=15., plot_height=3.)
+    #plot_video(rows=1, cols=5, frame_list=frames, plot_width=15., plot_height=3.)
+    
+    for image in frames:
+    plt.imshow(image)
+    plt.title(label)
+    plt.show()
+    plt.pause(1)
+
 
 
 

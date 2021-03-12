@@ -59,28 +59,28 @@ if __name__ == '__main__':
 
 
 
-    """ DEMO 2 SINGLE CONTINUOUS FRAME CLIP INSTEAD OF SAMPLED FRAMES, WITHOUT TRANSFORMS """
-    # If you do not want to use sparse temporal sampling, and instead
-    # want to just load N consecutive frames starting from a random
-    # start index, this is easy. Simply set NUM_SEGMENTS=1 and
-    # FRAMES_PER_SEGMENT=N. Each time a sample is loaded, N
-    # frames will be loaded from a new random start index.
-    dataset = VideoFrameDataset(
-        root_path=videos_root,
-        annotationfile_path=annotation_file,
-        num_segments=1,
-        frames_per_segment=9,
-        imagefile_template='img_{:05d}.jpg',
-        transform=None,
-        random_shift=True,
-        test_mode=False
-    )
+#     """ DEMO 2 SINGLE CONTINUOUS FRAME CLIP INSTEAD OF SAMPLED FRAMES, WITHOUT TRANSFORMS """
+#     # If you do not want to use sparse temporal sampling, and instead
+#     # want to just load N consecutive frames starting from a random
+#     # start index, this is easy. Simply set NUM_SEGMENTS=1 and
+#     # FRAMES_PER_SEGMENT=N. Each time a sample is loaded, N
+#     # frames will be loaded from a new random start index.
+#     dataset = VideoFrameDataset(
+#         root_path=videos_root,
+#         annotationfile_path=annotation_file,
+#         num_segments=1,
+#         frames_per_segment=9,
+#         imagefile_template='img_{:05d}.jpg',
+#         transform=None,
+#         random_shift=True,
+#         test_mode=False
+#     )
 
-    sample = dataset[3]
-    frames = sample[0]  # list of PIL images
-    label = sample[1]  # integer label
+#     sample = dataset[3]
+#     frames = sample[0]  # list of PIL images
+#     label = sample[1]  # integer label
 
-    plot_video(rows=3, cols=3, frame_list=frames, plot_width=10., plot_height=5.)
+#     plot_video(rows=3, cols=3, frame_list=frames, plot_width=10., plot_height=5.)
 
 
 
@@ -153,56 +153,56 @@ if __name__ == '__main__':
         break
 
 
-    """ DEMO 5: SAMPLES WITH MULTIPLE LABELS """
-    """
-    Apart from supporting just a single label per sample, VideoFrameDataset also supports multi-label samples,
-    where a sample can be associated with more than just one label. EPIC-KITCHENS, for example, associates a
-    noun, verb, and action with each video clip. To support this, instead of each row in annotations.txt
-    being (VIDEO_PATH, START_FRAME, END_FRAME, LABEL_ID), each row can also be
-    (VIDEO_PATH, START_FRAME, END_FRAME, LABEL_1_ID, ..., LABEL_N_ID). An example of this can be seen in the
-    directory `demo_dataset_multilabel`.
+#     """ DEMO 5: SAMPLES WITH MULTIPLE LABELS """
+#     """
+#     Apart from supporting just a single label per sample, VideoFrameDataset also supports multi-label samples,
+#     where a sample can be associated with more than just one label. EPIC-KITCHENS, for example, associates a
+#     noun, verb, and action with each video clip. To support this, instead of each row in annotations.txt
+#     being (VIDEO_PATH, START_FRAME, END_FRAME, LABEL_ID), each row can also be
+#     (VIDEO_PATH, START_FRAME, END_FRAME, LABEL_1_ID, ..., LABEL_N_ID). An example of this can be seen in the
+#     directory `demo_dataset_multilabel`.
     
-    Each sample returned by VideoFrameDataset is then ((FRAMESxCHANNELSxHEIGHTxWIDTH), (LABEL_1, ..., LABEL_N)).
-    When paired with the `torch.utils.data.DataLoader`, instead of yielding each batch as
-    ((BATCHxFRAMESxCHANNELSxHEIGHTxWIDTH), (BATCH)) where the second tuple item is the labels of the batch,
-    `torch.utils.data.DataLoader` returns a batch as ((BATCHxFRAMESxCHANNELSxHEIGHTxWIDTH), ((BATCH),...,(BATCH))
-    where the second tuple item is itself a tuple, with N BATCH-sized tensors of labels, where N is the 
-    number of labels assigned to each sample.
-    """
-    videos_root = os.path.join(os.getcwd(), 'demo_dataset_multilabel')
-    annotation_file = os.path.join(videos_root, 'annotations.txt')
+#     Each sample returned by VideoFrameDataset is then ((FRAMESxCHANNELSxHEIGHTxWIDTH), (LABEL_1, ..., LABEL_N)).
+#     When paired with the `torch.utils.data.DataLoader`, instead of yielding each batch as
+#     ((BATCHxFRAMESxCHANNELSxHEIGHTxWIDTH), (BATCH)) where the second tuple item is the labels of the batch,
+#     `torch.utils.data.DataLoader` returns a batch as ((BATCHxFRAMESxCHANNELSxHEIGHTxWIDTH), ((BATCH),...,(BATCH))
+#     where the second tuple item is itself a tuple, with N BATCH-sized tensors of labels, where N is the 
+#     number of labels assigned to each sample.
+#     """
+#     videos_root = os.path.join(os.getcwd(), 'demo_dataset_multilabel')
+#     annotation_file = os.path.join(videos_root, 'annotations.txt')
 
-    dataset = VideoFrameDataset(
-        root_path=videos_root,
-        annotationfile_path=annotation_file,
-        num_segments=5,
-        frames_per_segment=1,
-        imagefile_template='img_{:05d}.jpg',
-        transform=preprocess,
-        random_shift=True,
-        test_mode=False
-    )
+#     dataset = VideoFrameDataset(
+#         root_path=videos_root,
+#         annotationfile_path=annotation_file,
+#         num_segments=5,
+#         frames_per_segment=1,
+#         imagefile_template='img_{:05d}.jpg',
+#         transform=preprocess,
+#         random_shift=True,
+#         test_mode=False
+#     )
 
-    dataloader = torch.utils.data.DataLoader(
-        dataset=dataset,
-        batch_size=3,
-        shuffle=True,
-        num_workers=2,
-        pin_memory=True
-    )
+#     dataloader = torch.utils.data.DataLoader(
+#         dataset=dataset,
+#         batch_size=3,
+#         shuffle=True,
+#         num_workers=2,
+#         pin_memory=True
+#     )
 
-    print("\nMulti-Label Example")
-    for epoch in range(10):
-        for batch in dataloader:
-            """
-            Insert Training Code Here
-            """
-            video_batch, (labels1, labels2, labels3) = batch
+#     print("\nMulti-Label Example")
+#     for epoch in range(10):
+#         for batch in dataloader:
+#             """
+#             Insert Training Code Here
+#             """
+#             video_batch, (labels1, labels2, labels3) = batch
 
-            print("Video Batch Tensor Size:", video_batch.size())
-            print("Labels1 Size:", labels1.size())  # == batch_size
-            print("Labels2 Size:", labels2.size())  # == batch_size
-            print("Labels3 Size:", labels3.size())  # == batch_size
+#             print("Video Batch Tensor Size:", video_batch.size())
+#             print("Labels1 Size:", labels1.size())  # == batch_size
+#             print("Labels2 Size:", labels2.size())  # == batch_size
+#             print("Labels3 Size:", labels3.size())  # == batch_size
 
-            break
-        break
+#             break
+#         break
